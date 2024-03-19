@@ -95,6 +95,11 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
+#Section creates a public route table association with the private subnet
+resource "aws_route_table_association" "public_rt" {
+  subnet_id = aws_subnet.public.id
+  route_table_id = aws_route_table.public_rt.id
+}
 #Section creates a private route table with a default route to the NAT gateway
 resource "aws_route_table" "private_rt" {
   vpc_id = aws_vpc.First_VPC.id
@@ -109,4 +114,10 @@ resource "aws_route_table" "private_rt" {
     Environment = "Dev"
   }
   depends_on = [aws_nat_gateway.nat_gw]
+}
+
+ #Section creates a public route table association with the private subnet
+resource "aws_route_table_association" "private_rt" {
+  subnet_id = aws_subnet.private.id
+  route_table_id = aws_route_table.private_rt.id
 }
